@@ -1,5 +1,6 @@
-// Handles the players of the game
 // TODO: Implement feature to break out of getPlay() function if there is a draw or a win
+
+// Handles the players of the game
 
 function player(symbol, name) {
     function getSymbol() {
