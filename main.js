@@ -1,18 +1,29 @@
 // Handles the players of the game
-function player(symbol) {
+// TODO: Implement feature to break out of getPlay() function if there is a draw or a win
+
+function player(symbol, name) {
     function getSymbol() {
         return symbol
     }
 
-    return {getSymbol}
+    function getName() {
+        return name
+    }
+
+    return {getSymbol, getName}
 }
 
-const playerX = player('X')
-const playerO = player('O')
+const alertBox = document.querySelector('.alert')
+
+const firstPlayerName = prompt('Player One("X"), enter your name:')
+const secondPlayerName = prompt('Player One("O"), enter your name:')
+
+const playerX = player('X', firstPlayerName)
+const playerO = player('O', secondPlayerName)
 
 // Handles the board of the game
 const gameboard = (function() {
-    const board = [
+    let board = [
         0, 1, 2,
         3, 4, 5,
         6, 7, 8
@@ -28,16 +39,25 @@ const gameboard = (function() {
         return board
     }
 
-    return {getBoard, makeMove}
+    function clearBoard() {
+        board = [
+            0, 1, 2,
+            3, 4, 5,
+            6, 7, 8
+        ]
+    }
+
+    return {getBoard, makeMove, clearBoard}
 })()
 
 // Handles the game logic
 const game = (function() {
+    let gameOver = false
+
     let currentPlayer = playerX
     let previousPlayer = playerO
 
     function checkGameStatus() {
-        // TODO: Complete checking for win feature
         let isDraw = false
         let winner = ''
         let result = ''
@@ -86,8 +106,10 @@ const game = (function() {
 
         if(isDraw === true) {
             result = 'Draw'
+            gameOver = true
         } else if(winner != '') {
             result = `${winner}`
+            gameOver = true
         } else {
             result = 'none'
         }
@@ -96,44 +118,51 @@ const game = (function() {
     }
 
     function getPlay(){
-        const submitButton = document.querySelector('#submit')
+        const boardCells = document.querySelectorAll('.board-cell')
 
-        submitButton.addEventListener('click', event => {
-            event.preventDefault()
+        alertBox.innerText = ''
 
-            const position = document.querySelector('#position').value - 1
+        boardCells.forEach(cell => {
+            cell.addEventListener('click', () => {
+                const position = cell.id
 
-            // Confirms if the player is allowed to play there by checking if the value input from the user is equal to the value in that array position. If it is not, then it means that block has been played in
-            if(gameboard.getBoard()[position] == position) {
-                // Determining who's turn it is to play
-                if(previousPlayer == playerX) {
-                    currentPlayer = playerO
+                if(cell.innerText == '') {
+                    // Determining who's turn it is to play
+                    if(previousPlayer == playerX) {
+                        currentPlayer = playerO
+                    } else {
+                        currentPlayer = playerX
+                    }
+                    previousPlayer = currentPlayer
+    
+                    const newBoard = gameboard.makeMove(currentPlayer.getSymbol(), position)
+                    const gameStatus = checkGameStatus()
+
+                    cell.innerText = gameboard.getBoard()[Number(cell.id)]
+    
+                    if(gameStatus == 'Draw') {
+                        alertBox.innerText = 'DRAW!'
+                    } else if(gameStatus == 'X' || gameStatus == 'O') {
+                        alertBox.innerText = `${currentPlayer.getName()}(${currentPlayer.getSymbol()}) has Won!`
+                    } else {
+                        alertBox.innerText = `${previousPlayer.getName()}(${previousPlayer.getSymbol()}) just played!`
+                    }
+    
+                    return newBoard
                 } else {
-                    currentPlayer = playerX
+                    alertBox.innerHTML = `You can't play there!`
                 }
-                previousPlayer = currentPlayer
-
-                const newBoard = gameboard.makeMove(currentPlayer.getSymbol(), position)
-                const gameStatus = checkGameStatus()
-                console.log(newBoard)
-                console.log(checkGameStatus())
-
-                if(gameStatus == 'Draw') {
-                    console.log('DRAWWW!')
-                } else if(gameStatus == 'X' || gameStatus == 'O') {
-                    console.log(`Player '${gameStatus}' has Won!`)
-                } else {
-                    console.log('Moving on...')
-                }
-
-                return newBoard
-            } else {
-                return 'Cannot play there'
-            }
+            })
         })
     }
 
     return {getPlay}
 })()
 
-game.getPlay()
+const startButton = document.querySelector('.start').addEventListener('click', () => {
+    game.getPlay()
+})
+
+const restartButton = document.querySelector('.restart').addEventListener('click', () => {
+    location.reload()
+})

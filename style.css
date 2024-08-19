@@ -1,3 +1,62 @@
-input {
-    width: 150px;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #000;
+    color: #fff;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 1rem;
+    font-weight: normal;
+}
+
+.container {
+    height: 100vh;
+    width: 100%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.board {
+    display: grid;
+    height: 500px;
+    width: 500px;
+    grid-template: 1fr 1fr 1fr / 1fr 1fr 1fr
+}
+
+.board-cell {
+    cursor: pointer;
+    border: 1px solid #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+
+    transition: all 300ms ease-in-out
+}
+
+.board-cell:hover {
+    background-color: rgb(255, 255, 255, 10%);
+}
+
+.game-functions {
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.game-functions button{
+    cursor: pointer;
+    height: 50px;
+    width: 100px;
+    border-radius: 10px;
+    background-color: #4f4f4f;
+    color: #fff;
+    border: 1px #fff solid;
 }

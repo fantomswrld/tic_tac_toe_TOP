@@ -7,11 +7,26 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <form>
-        <input type="number" name="position" id="position" placeholder="position" min="1" max="9" required>
+    <div class="container">
+        <div class="game-functions">
+            <button type="button" class="start">Start</button>
+            <button type="button" class="restart">Restart</button>
+        </div>
+        
+        <h1 class="alert">Press 'start' to begin</h1>
 
-        <button type="submit" id="submit">Submit</button>
-    </form>
+        <div class="board">
+            <div class="board-cell" id="0"></div>
+            <div class="board-cell" id="1"></div>
+            <div class="board-cell" id="2"></div>
+            <div class="board-cell" id="3"></div>
+            <div class="board-cell" id="4"></div>
+            <div class="board-cell" id="5"></div>
+            <div class="board-cell" id="6"></div>
+            <div class="board-cell" id="7"></div>
+            <div class="board-cell" id="8"></div>
+        </div>
+    </div>
 
     <script src="main.js"></script>
 </body>
